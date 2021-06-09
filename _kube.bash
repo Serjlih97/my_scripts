@@ -72,6 +72,20 @@ _my_kube_exec() {
     kubectl -n "$1" exec "$2" -it bash
 }
 
+_my_kube_edit() {
+    if [ -z "$1" ]; then
+        echo 'Wrong ns name'
+        return 1
+    fi
+
+    if [ -z "$2" ]; then
+        echo 'Wrong pod name'
+        return 1
+    fi
+
+    kubectl -n "$1" edit "deployments/$2"
+}
+
 _my_kube_logs() {
     local params
     if [ -z "$1" ]; then
@@ -92,7 +106,7 @@ _my_kube_logs() {
 _my_kube_complite() {
     local params
 
-    subCommands=("ip" "info" "go" "exec" "logs")
+    subCommands=("ip" "info" "go" "exec" "edit" "logs")
 
     echo "1: :(${subCommands[*]})"
     echo "*::arg:->args"
@@ -113,6 +127,19 @@ _my_kube_ns_pod_complite() {
 
     if _check_in_array "$1" "${namespaces[@]}"; then
         pods=($(_get_kube_pods "$1"))
+
+        echo "2: :(${pods[*]})"
+        continue
+    fi
+}
+
+_my_kube_edit_complite() {
+    namespaces=($(_get_kube_namespaces))
+
+    echo "1: :(${namespaces[*]})"
+
+    if _check_in_array "$1" "${namespaces[@]}"; then
+        pods=($(_get_kube_apps "$1"))
 
         echo "2: :(${pods[*]})"
         continue

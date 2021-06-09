@@ -46,7 +46,13 @@ _get_kube_namespaces() {
 }
 
 _get_kube_pods() {
-  comand="kubectl -n $1 get pod --no-headers -o custom-columns=NAME:.metadata.name"
+  comand="kubectl -n $1 get pods -o=jsonpath=\"{.items[*]['metadata.name']}\""
+  pods="$(bash -c $comand)"
+  echo $pods
+}
+
+_get_kube_apps() {
+  comand="kubectl -n $1 get pods -o=jsonpath=\"{.items[*]['metadata.labels.app']}\""
   pods="$(bash -c $comand)"
   echo $pods
 }
