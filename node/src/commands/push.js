@@ -42,9 +42,14 @@ class Command extends BaseCommand {
             command += ' -o merge_request.create';
             const label = args[0];
 
+            const res = await helper.exec(`git show-branch remotes/origin/${branch}`);
+
             if (labels.indexOf(label) != -1) {
                 args = args.slice(1);
                 command += ` -o merge_request.label=${label}`
+            } else if (!res) {
+                console.log('label is require for first push');
+                return 1;
             }
         }
 

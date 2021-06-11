@@ -57,6 +57,14 @@ alias для git push origin branch_name
 my push
 ```
 
+## master
+
+Переключает на master ветку
+alias для git checkout master
+```bash
+my push
+```
+
 
 ## task
 
