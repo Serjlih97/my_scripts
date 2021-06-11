@@ -1,5 +1,10 @@
 .idea/
 .DS_Store
+node_modules
 
-tmp/*
-!tmp/.gitkeep
+node/tmp/*
+!node/tmp/.gitkeep
+
+
+bash/tmp/*
+!bash/tmp/.gitkeep

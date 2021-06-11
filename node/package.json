@@ -1,0 +1,19 @@
+{
+  "name": "my-scripts",
+  "version": "1.0.0",
+  "bin": {
+    "my": "index.sh",
+    "_my": "index.js"
+  },
+  "description": "",
+  "scripts": {
+    "setup": "node index.js --setup",
+    "cleanup": "node index.js --cleanup"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cli-color": "^2.0.0",
+    "omelette": "^0.4.15-1"
+  }
+}

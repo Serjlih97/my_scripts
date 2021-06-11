@@ -29,7 +29,7 @@ _my_push_complite() {
     masterBranches=("master" "cupis_master")
 
     if ! _check_in_array "$branch" "${masterBranches[@]}"; then
-        tags=("breaking-changes" "bugfix" "docs" "enhancement" "feature" "refactor")
+        tags=("breaking-changes" "bugfix" "docs" "enhancement" "feature")
 
         echo "1: :(${tags[*]})"
         echo "*::arg:->args"
