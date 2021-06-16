@@ -1,4 +1,3 @@
-const clc         = require("cli-color");
 const BaseCommand = require('../_base');
 const helper      = require('../../modules/helper');
 
