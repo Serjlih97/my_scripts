@@ -1,7 +1,7 @@
 const BaseCommand = require('./_base');
 const helper      = require('../modules/helper');
 
-const labels = ['breaking-changes', 'bugfix', 'docs', 'enhancement', 'feature'];
+const labels = ['breaking-changes', 'bugfix', 'docs', 'enhancement', 'feature', 'refactor'];
 const master_branches = ['master', 'cupis_master'];
 
 class Command extends BaseCommand {
@@ -39,14 +39,13 @@ class Command extends BaseCommand {
         let command = `git push origin ${branch}`;
 
         if (master_branches.indexOf(branch) == -1) {
-            command += ' -o merge_request.create';
             const label = args[0];
 
             const res = await helper.exec(`git show-branch remotes/origin/${branch}`);
 
             if (labels.indexOf(label) != -1) {
                 args = args.slice(1);
-                command += ` -o merge_request.label=${label}`
+                command += ` -o merge_request.create -o merge_request.label=${label}`
             } else if (!res) {
                 console.log('label is require for first push');
                 return 1;
