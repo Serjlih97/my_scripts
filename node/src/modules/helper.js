@@ -100,16 +100,16 @@ class Helper {
     async get_kube_pods(namespace) {
         const res = await this.exec(`kubectl -n ${namespace} get pods -o=jsonpath="{.items[*]['metadata.name']}"`)
 
-        return res;
+        return res[0].split(' ');
     }
 
     async get_kube_apps(namespace) {
         const res = await this.exec(`kubectl -n ${namespace} get pods -o=jsonpath="{.items[*]['metadata.labels.app']}"`)
 
-        return res;
+        return res[0].split(' ');
     }
 
-    async kube_autocomplete(c, type = 'pods') {
+    async kube_autocomplete(c, type = 'pods', filter = false) {
         if (c.fragment < 4) {
             const namespaces = await this.get_kube_namespaces();
             return c.reply(namespaces);
@@ -127,6 +127,11 @@ class Helper {
             if (type == 'apps') {
                 res = await this.get_kube_apps(namespace);
             }
+
+            if (filter) {
+                res = filter(res, c, type);
+            }
+
             return c.reply(res);
         }
 

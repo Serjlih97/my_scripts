@@ -1,0 +1,9 @@
+{
+    "dbs": [
+        {
+            "name": "db-game",
+            "port": "5432",
+            "local_port": "5439"
+        }
+    ]
+}

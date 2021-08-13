@@ -4,6 +4,28 @@
 
 Проверенно только на `Mac OS`
 
+## config
+
+Подготовьте config для себя
+
+```json
+{
+    "dbs": [
+        {
+            "name": "db-game",
+            "port": "5432",
+            "local_port": "5439"
+        }
+    ]
+}
+
+```
+
+- `dbs` - *array[object]* - Список баз данных
+  - `name` - *string* - App name
+  - `port` - *string* - Порт базы (5432 - postgres)
+  - `local_port` - *string* - Порт локальный
+
 # Установка
 
 ```bash
@@ -65,7 +87,6 @@ alias для git checkout master
 my push
 ```
 
-
 ## task
 
 Переход в таску jira по названию ветки
@@ -124,6 +145,21 @@ my docker stop container_name container_name ...
 Работа с kubectl (Нужно чтобы был установлен kubectl и настроен)
 Работает автоподстановка для неймспейсов и подов
 ! Неймспейсы кешируются если добавлен новый неймспейс для его появления нужно выполнить команду ctmp
+
+### db
+
+Прокидывает port баззы данных на локальное устройство
+! Доступны только те что указанны в config
+```bash
+my kube db namespace_name app_name
+```
+
+### edit
+
+Изменить настройки deployment
+```bash
+my kube exec namespace_name app_name
+```
 
 ### exec
 
