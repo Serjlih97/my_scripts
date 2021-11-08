@@ -4,6 +4,6 @@
 
 ## Реализация:
 
-[bash](./bash)
+[bash](./bash) (Устарел)
 
 [nodejs](./node)
