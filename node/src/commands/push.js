@@ -45,7 +45,7 @@ class Command extends BaseCommand {
 
             if (labels.indexOf(label) != -1) {
                 args = args.slice(1);
-                command += ` -o merge_request.create -o merge_request.label=${label}`
+                command += ` -o merge_request.create -o merge_request.title=${branch} -o merge_request.description="$(git log -1 --pretty=%s)" -o merge_request.label=${label}`
             } else if (!res) {
                 console.log('label is require for first push');
                 return 1;
