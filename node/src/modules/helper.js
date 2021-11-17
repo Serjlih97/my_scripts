@@ -21,13 +21,13 @@ class Helper {
     }
 
     async git_current_branch() {
-        const res = await this.exec('git branch');
+        const res = await this.exec('git rev-parse --abbrev-ref HEAD');
 
         if (!res) {
             return false;
         }
 
-        return res.find(el => /^\* .*/.test(el)).replace('* ', '');
+        return res[0];
     }
 
     async get_docker_containers(type = 'all') {
