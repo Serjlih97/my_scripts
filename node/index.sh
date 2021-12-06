@@ -4,7 +4,9 @@ cmd=`basename $0`
 com_output=$(_$cmd "$@")
 exit_code=$?
 
-while read i
+IFS=$'\n'
+
+for i in $com_output;
 do
   check=$(echo "$i" | grep _BASH)
 
@@ -13,7 +15,7 @@ do
   else
     command=$(echo $i | cut -b 7-)
   fi
-done <<< "${com_output}"
+done
 
 if [[ ! -z "$1" ]]; then
   bash -c "$command"

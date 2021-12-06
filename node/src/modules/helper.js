@@ -115,7 +115,7 @@ class Helper {
             return c.reply(namespaces);
         }
 
-        if (c.fragment < 5) {
+        if (c.fragment < 5 && type != 'namespaces') {
             let args        = c.args.slice(3);
             const namespace = args[0];
             let res         = [];
