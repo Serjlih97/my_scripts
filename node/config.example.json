@@ -1,4 +1,7 @@
 {
+    "kube": {
+        "pods_expire_ms": 5000
+    },
     "dbs": [
         {
             "name": "db-game",

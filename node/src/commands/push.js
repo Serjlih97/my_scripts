@@ -9,22 +9,11 @@ class Command extends BaseCommand {
         const branch = await helper.git_current_branch();
         const tags = ['--force'];
 
-        if (master_branches.indexOf(branch) != -1) {
-            if (c.fragment >= 3) {
-                return;
-            }
-
-            c.reply(tags);
-            return;
+        if (master_branches.indexOf(branch) == -1) {
+            c.reply(labels);
         }
 
-        if (c.fragment < 3) {
-            return c.reply([...labels, ...tags]);
-        }
-
-        if (c.fragment < 4 && tags.indexOf(c.args[2]) == -1) {
-            return c.reply(tags);
-        }
+        c.reply(tags);
     }
 
     async run(args) {

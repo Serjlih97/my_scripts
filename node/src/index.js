@@ -1,5 +1,5 @@
 const fs          = require('fs');
-const omelette    = require('omelette');
+const omelette    = require('./modules/omelette');
 const helper      = require('./modules/helper');
 
 const commands = helper.readCommands(__dirname + '/commands');
@@ -17,9 +17,7 @@ const completion = async (fragment, c) => {
     const command_name = c.args[1];
     c.arg = c.args[c.fragment];
 
-    if (c.fragment < 2) {
-        return c.reply([...Object.keys(commands), tags])
-    }
+    c.reply([...Object.keys(commands), tags])
 
     const command = commands[command_name];
     const result = [];

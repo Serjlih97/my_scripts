@@ -1,5 +1,6 @@
 const fs            = require('fs');
 const child_process = require('child_process');
+const config        = require('../modules/config');
 const BaseCommand   = require('../commands/_base');
 
 class Helper {
@@ -56,30 +57,37 @@ class Helper {
         if (!multy) {
             if (c.fragment < 4) {
                 let containers = await this.get_docker_containers(type);
-                return c.reply(containers);
+                c.reply(containers);
+            } else {
+                c.reply([])
             }
             return;
         }
 
-        let args = c.args.slice(3);
+        let args       = c.args.slice(3);
+        let containers = await this.get_docker_containers(type);
 
+        if (!containers) {
+            return;
+        }
+
+        this.multi_complite(c, args, containers);
+    }
+
+    multi_complite(c, args, list) {
         if (!c.complete) {
             args.pop();
         }
 
-        let containers = await this.get_docker_containers(type);
+        args.forEach(el => c.reply([el]));
 
-        if (!containers) {
-            return 0;
-        }
+        list = list.filter(el => args.indexOf(el) == -1);
 
-        containers = containers.filter(el => args.indexOf(el) == -1);
-
-        return c.reply(containers);
+        c.reply(list);
     }
 
     async get_kube_namespaces() {
-        const file_name = __dirname + '/../../tmp/namespaces';
+        const file_name = __dirname + '/../../tmp/kube_namespaces';
 
         if (fs.existsSync(file_name)) {
             const namespaces = JSON.parse(fs.readFileSync(file_name));
@@ -98,24 +106,75 @@ class Helper {
     }
 
     async get_kube_pods(namespace) {
+        const file_name = __dirname + '/../../tmp/kube_pods';
+        let pods = {};
+
+        if (fs.existsSync(file_name)) {
+            pods = JSON.parse(fs.readFileSync(file_name));
+
+            if (pods[namespace] && pods[namespace].expire_dttm > Date.now()) {
+                return pods[namespace].pods;
+            }
+        }
+
         const res = await this.exec(`kubectl -n ${namespace} get pods -o=jsonpath="{.items[*]['metadata.name']}"`)
 
-        return res[0].split(' ');
+        if (!res) {
+            return res;
+        }
+
+        pods[namespace] = {
+            pods        : res[0].split(' '),
+            expire_dttm : Date.now() + config.kube.pods_expire_ms,
+        };
+
+        fs.writeFileSync(file_name, JSON.stringify(pods));
+
+        return pods[namespace].pods;
     }
 
     async get_kube_apps(namespace) {
+        const file_name = __dirname + '/../../tmp/kube_apps';
+        let apps = {};
+
+        if (fs.existsSync(file_name)) {
+            apps = JSON.parse(fs.readFileSync(file_name));
+
+            if (apps[namespace] && apps[namespace].expire_dttm > Date.now()) {
+                return apps[namespace].apps;
+            }
+        }
+
         const res = await this.exec(`kubectl -n ${namespace} get pods -o=jsonpath="{.items[*]['metadata.labels.app']}"`)
 
-        return res[0].split(' ');
+        if (!res) {
+            return res;
+        }
+
+        apps[namespace] = {
+            apps        : res[0].split(' '),
+            expire_dttm : Date.now() + config.kube.pods_expire_ms,
+        };
+
+        fs.writeFileSync(file_name, JSON.stringify(apps));
+
+        return apps[namespace].apps;
     }
 
     async kube_autocomplete(c, type = 'pods', filter = false) {
-        if (c.fragment < 4) {
+        if (c.fragment < 4)  {
             const namespaces = await this.get_kube_namespaces();
-            return c.reply(namespaces);
+            c.reply(namespaces);
+            return;
+        } else {
+            c.reply([]);
         }
 
-        if (c.fragment < 5 && type != 'namespaces') {
+        if (type == 'namespaces') {
+            return;
+        }
+
+        if (c.fragment < 5) {
             let args        = c.args.slice(3);
             const namespace = args[0];
             let res         = [];
@@ -132,10 +191,10 @@ class Helper {
                 res = filter(res, c, type);
             }
 
-            return c.reply(res);
+            c.reply(res);
+        } else {
+            c.reply([]);
         }
-
-        return;
     }
 
     readCommands(path) {

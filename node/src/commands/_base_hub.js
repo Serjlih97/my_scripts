@@ -9,8 +9,10 @@ class BaseHubCommand extends BaseCommand {
     }
 
     async complete(c) {
+        c.reply(Object.keys(this.commands));
+
         if (c.fragment < 3) {
-            return c.reply(Object.keys(this.commands));
+            return;
         }
 
         const cmd = c.args[2];
