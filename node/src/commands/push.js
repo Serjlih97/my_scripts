@@ -10,7 +10,7 @@ class Command extends BaseCommand {
         const tags = ['--force'];
 
         if (master_branches.indexOf(branch) == -1) {
-            c.reply([labels, ...tags]);
+            c.reply([...labels, ...tags]);
         }
 
         c.reply(tags);
