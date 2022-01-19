@@ -17,7 +17,7 @@ do
   fi
 done
 
-if [[ ! -z "$1" ]]; then
+if [[ ! -z "$command" ]]; then
   bash -c "$command"
 fi
 exit $exit_code;

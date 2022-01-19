@@ -8,5 +8,13 @@
             "port": "5432",
             "local_port": "5439"
         }
+    ],
+    "sshs": [
+        {
+            "name": "ssh_name",
+            "user": "user",
+            "host": "host",
+            "port": 22
+        }
     ]
 }
