@@ -1,7 +1,7 @@
 const BaseCommand = require('./_base');
 const helper      = require('../modules/helper');
 
-const labels = ['breaking-changes', 'bugfix', 'docs', 'enhancement', 'feature', 'refactor'];
+const labels = ['patch', 'minor', 'major'];
 const master_branches = ['master', 'cupis_master'];
 
 class Command extends BaseCommand {
