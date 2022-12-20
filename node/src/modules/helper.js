@@ -161,6 +161,34 @@ class Helper {
         return apps[namespace].apps;
     }
 
+    async get_kube_services(namespace) {
+        const file_name = __dirname + '/../../tmp/kube_services';
+        let services = {};
+
+        if (fs.existsSync(file_name)) {
+            services = JSON.parse(fs.readFileSync(file_name));
+
+            if (services[namespace] && services[namespace].expire_dttm > Date.now()) {
+                return services[namespace].services;
+            }
+        }
+
+        const res = await this.exec(`kubectl -n ${namespace} get services -o=jsonpath="{.items[*]['metadata.name']}"`)
+
+        if (!res) {
+            return res;
+        }
+
+        services[namespace] = {
+            services        : res[0].split(' '),
+            expire_dttm : Date.now() + config.kube.pods_expire_ms,
+        };
+
+        fs.writeFileSync(file_name, JSON.stringify(services));
+
+        return services[namespace].services;
+    }
+
     async kube_autocomplete(c, type = 'pods', filter = false) {
         if (c.fragment < 4)  {
             const namespaces = await this.get_kube_namespaces();
@@ -185,6 +213,10 @@ class Helper {
 
             if (type == 'apps') {
                 res = await this.get_kube_apps(namespace);
+            }
+
+            if (type == 'services') {
+                res = await this.get_kube_services(namespace);
             }
 
             if (filter) {

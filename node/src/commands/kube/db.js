@@ -6,8 +6,8 @@ const dbs = config.dbs.map(el => el.name);
 
 class Command extends BaseCommand {
     complete(c) {
-        return helper.kube_autocomplete(c, 'apps', (apps) => {
-            return apps.filter(el => dbs.includes(el));
+        return helper.kube_autocomplete(c, 'services', (services) => {
+            return services.map(el => el.replace('-service', '')).filter(el => dbs.includes(el));
         });
     }
 
@@ -32,7 +32,7 @@ class Command extends BaseCommand {
             return 1;
         }
 
-        console.log(`_BASH kubectl -n "${namespace}" port-forward "deployment/${app}" ${db_config.local_port}:${db_config.port}`);
+        console.log(`_BASH kubectl -n "${namespace}" port-forward "services/${app}-service" ${db_config.local_port}:${db_config.port}`);
     }
 }
 
