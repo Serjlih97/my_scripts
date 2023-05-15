@@ -1,7 +1,7 @@
 const BaseCommand = require('./_base');
 const helper      = require('../modules/helper');
 
-const dashboards = ['ONL', 'BACK', 'XX', 'SPOR', 'CRM', 'RED', 'DK'];
+const dashboards = ['ONL', 'BACK', 'XX', 'SPOR', 'CRM', 'RED', 'DK', 'FEED', 'BET'];
 const default_dashboard = dashboards[0];
 
 class Command extends BaseCommand {
