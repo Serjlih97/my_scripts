@@ -10,21 +10,39 @@
 
 ```json
 {
+    "kube": {
+        "pods_expire_ms": 5000
+    },
     "dbs": [
         {
             "name": "db-game",
             "port": "5432",
             "local_port": "5439"
         }
+    ],
+    "sshs": [
+        {
+            "name": "ssh_name",
+            "user": "user",
+            "host": "host",
+            "port": 22
+        }
     ]
 }
 
 ```
 
+- `kube` - *object*
+  - `pods_expire_ms` - *number* - Время кеширования списка подов в миллисекундах
 - `dbs` - *array[object]* - Список баз данных
   - `name` - *string* - App name
   - `port` - *string* - Порт базы (5432 - postgres)
   - `local_port` - *string* - Порт локальный
+- `sshs` - *array[object]* - Список ssh консолей
+    - `name` - *string* - Имя ssh соединения
+    - `user` - *string* - Пользователь
+    - `host` - *string* - Хост
+    - `port` - *number* - Порт
 
 # Установка
 
@@ -93,6 +111,25 @@ my push
 ```bash
 my task
 ```
+
+## ssh
+
+Открывает ssh консоль на основе конфига
+```bash
+my ssh ssh_name
+```
+
+## gen_grants
+
+Генерирует гранты для базы данных на основе sql файла
+```bash
+my gen_grants db_user_name patch/to/file.sql --errors
+```
+
+Где:
+- `db_user_name` - *string* - Имя пользователя базы данных
+- `patch/to/file.sql` - *string* - Путь до файла с sql запросами
+- `--errors` - *flag* - Флаг для просмотра ошибок
 
 ## docker
 

@@ -254,6 +254,34 @@ class Helper {
 
         return cmds;
     }
+
+    parseArgs(args) {
+        let flags = {};
+        let out_args = [];
+
+        for (let i = 0; i < args.length; i++) {
+            const el = args[i];
+
+            if (el[0] != '-') {
+                out_args.push(el);
+                continue;
+            }
+
+            const val = true;
+
+            if (args[i + 1] && args[i + 1][0] != '-') {
+                val = args[i + 1];
+                i++;
+            }
+
+            flags[el.replaceAll('-', '')] = val;
+        }
+
+        return {
+            flags,
+            args: out_args,
+        };
+    }
 }
 
 module.exports = new Helper();
