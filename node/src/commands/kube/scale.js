@@ -22,6 +22,11 @@ class Command extends BaseCommand {
             return 1;
         }
 
+        if (!count) {
+            console.log('Wrong count');
+            return 1;
+        }
+
         console.log(`_BASH kubectl -n "${namespace}" scale --replicas=${count} "deployments/${app}"`);
     }
 }

@@ -60,6 +60,41 @@ npm run cleanup
 
 # Команды
 
+- [branch](#branch)
+- [ctmp](#ctmp)
+- [glog](#glog)
+- [pull](#pull)
+- [push](#push)
+- [master](#master)
+- [task](#task)
+- [ssh](#ssh)
+- [gen_grants](#gen_grants)
+- [docker](#docker)
+  - [exec](#docker-exec)
+  - [logs](#docker-logs)
+  - [restart](#docker-restart)
+  - [rm](#docker-rm)
+  - [start](#docker-start)
+  - [status](#docker-status)
+  - [stop](#docker-stop)
+- [kube](#kube)
+    - [db](#kube-db)
+    - [delete](#kube-delete)
+    - [edit](#kube-edit)
+    - [exec](#kube-exec)
+    - [get_restart_pods](#kube-get_restart_pods)
+    - [go](#kube-go)
+    - [info](#kube-info)
+    - [ip](#kube-ip)
+    - [kubefwd](#kube-kubefwd)
+    - [logs](#kube-logs)
+    - [node_inspect](#kube-node_inspect)
+    - [port](#kube-port)
+    - [scale](#kube-scale)
+- [tele](#tele)
+    - [inter](#tele-inter)
+    - [leave](#tele-leave)
+
 ## branch
 
 Перейти на активную ветку в веб интерфейс (работает с vcs и github другие системы не проверялись)
@@ -135,42 +170,49 @@ my gen_grants db_user_name patch/to/file.sql --errors
 
 Работа с докером (для контейнеров работает автоподстановка)
 
-### exec
+### docker exec
 
 Перейти в bash контейнера
 ```bash
 my docker exec container_name
 ```
 
-### logs
+### docker logs
 
 Посмотреть логи контейнера
 ```bash
 my docker logs container_name
 ```
 
-### restart
+### docker restart
 
 Перезапустить контенеры
 ```bash
 my docker restart container_name container_name ...
 ```
 
-### start
+### docker rm
+
+Удалить контейнеры
+```bash
+my docker rm container_name container_name ...
+```
+
+### docker start
 
 Запустить контейнеры
 ```bash
 my docker start container_name container_name ...
 ```
 
-### status
+### docker status
 
 Статус контейнеров
 ```bash
 my docker status
 ```
 
-### stop
+### docker stop
 
 Остановить контейнеры
 ```bash
@@ -183,7 +225,7 @@ my docker stop container_name container_name ...
 Работает автоподстановка для неймспейсов и подов
 ! Неймспейсы кешируются если добавлен новый неймспейс для его появления нужно выполнить команду ctmp
 
-### db
+### kube db
 
 Прокидывает port баззы данных на локальное устройство
 ! Доступны только те что указанны в config
@@ -191,60 +233,102 @@ my docker stop container_name container_name ...
 my kube db namespace_name app_name
 ```
 
-### edit
+### kube delete
+
+Удаляет под
+```bash
+my kube delete namespace_name app_name
+```
+
+### kube edit
 
 Изменить настройки deployment
 ```bash
 my kube exec namespace_name app_name
 ```
 
-### exec
+### kube exec
 
 Перейти в bash пода
 ```bash
 my kube exec namespace_name pod_name
 ```
 
-### go
+### kube get_restart_pods
+
+Выводит список подов которые были перезапущены
+```bash
+my kube get_restart_pods namespace_name
+```
+
+### kube go
 
 Перейти в веб интерфейс пода
 ```bash
 my kube go namespace_name pod_name
 ```
 
-### info
+### kube info
 
 Вывести информацию о поде
 ```bash
 my kube info namespace_name pod_name
 ```
 
-### ip
+### kube ip
 
 Вывести ip пода
 ```bash
 my kube ip namespace_name pod_name
 ```
 
-### logs
+### kube kubefwd
+
+Пробросить порты namespace на локальную машину (Должен быть установлен kubefwd)
+```bash
+my kube kubefwd namespace_name
+```
+
+### kube logs
 
 Получить логи пода
 ```bash
 my kube logs namespace_name pod_name
 ```
 
+### kube node_inspect
+
+Прокинуть порт 9229 на локальную машину
+```bash
+my kube node_inspect namespace_name pod_name
+```
+
+### kube port
+
+Прокинуть порт пода на локальную машину
+```bash
+my kube port namespace_name pod_name service_port local_port
+```
+
+### kube scale
+
+Изменить количество реплик пода
+```bash
+my kube scale namespace_name pod_name count
+```
+
 ## tele
 
 Работа с telepresence (Нужно чтобы был установлен kubectl и настроен а так же telepresence)
 
-### inter
+### tele inter
 
 Перехватить трафик сервиса
 ```bash
 my tele inter namespace_name service_name service_port local_port
 ```
 
-### leave
+### tele leave
 
 Выйти из режима перехвата трафика
 ```bash
