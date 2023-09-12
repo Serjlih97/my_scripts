@@ -232,3 +232,21 @@ my kube ip namespace_name pod_name
 ```bash
 my kube logs namespace_name pod_name
 ```
+
+## tele
+
+Работа с telepresence (Нужно чтобы был установлен kubectl и настроен а так же telepresence)
+
+### inter
+
+Перехватить трафик сервиса
+```bash
+my tele inter namespace_name service_name service_port local_port
+```
+
+### leave
+
+Выйти из режима перехвата трафика
+```bash
+my tele leave intercept_name
+```

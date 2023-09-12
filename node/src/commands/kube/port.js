@@ -8,27 +8,6 @@ class Command extends BaseCommand {
     }
 
     async run(args) {
-
-        // let res = await helper.exec(`kubectl -n "bboncyp-toto-staging" get pods -o=jsonpath="{range .items[*]}{.spec.containers[0].ports}{' split '}{.metadata.name}{'\\n'}{end}" | grep containerPort`, true);
-
-        // res = res.filter(el => el);
-
-        // const result = res.map(el => {
-        //     const [
-        //         ports_row,
-        //         pod,
-        //     ] = el.split(' split ');
-
-        //     const ports = JSON.parse(ports_row).map(el => el.containerPort);
-
-        //     return {
-        //         pod   : pod,
-        //         ports : ports,
-        //     };
-        // });
-
-        // console.log(result, res);
-
         args = args.slice(1);
         const namespace = args.shift();
         const app = args.shift();
