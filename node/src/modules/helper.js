@@ -133,6 +133,34 @@ class Helper {
         return pods[namespace].pods;
     }
 
+    async get_kube_deployments(namespace) {
+        const file_name = __dirname + '/../../tmp/kube_deployments';
+        let deployments = {};
+
+        if (fs.existsSync(file_name)) {
+            deployments = JSON.parse(fs.readFileSync(file_name));
+
+            if (deployments[namespace] && deployments[namespace].expire_dttm > Date.now()) {
+                return deployments[namespace].deployments;
+            }
+        }
+
+        const res = await this.exec(`kubectl -n ${namespace} get deployments -o=jsonpath="{.items[*]['metadata.name']}"`)
+
+        if (!res) {
+            return res;
+        }
+
+        deployments[namespace] = {
+            deployments : res[0].split(' '),
+            expire_dttm : Date.now() + config.kube.pods_expire_ms,
+        };
+
+        fs.writeFileSync(file_name, JSON.stringify(deployments));
+
+        return deployments[namespace].deployments;
+    }
+
     async get_kube_apps(namespace) {
         const file_name = __dirname + '/../../tmp/kube_apps';
         let apps = {};
@@ -145,14 +173,24 @@ class Helper {
             }
         }
 
-        const res = await this.exec(`kubectl -n ${namespace} get pods -o=jsonpath="{.items[*]['metadata.labels.app']}"`)
+        const res = await this.exec(`kubectl -n ${namespace} get pods -o=json`)
 
         if (!res) {
             return res;
         }
 
+        const result = new Set();
+
+        JSON.parse(res.join('')).items.forEach(el => {
+            const app = el?.metadata?.labels?.['app.kubernetes.io/name'] || el?.metadata?.labels?.app;
+
+            if (app) {
+                result.add(app);
+            }
+        });
+
         apps[namespace] = {
-            apps        : res[0].split(' '),
+            apps        : Array.from(result),
             expire_dttm : Date.now() + config.kube.pods_expire_ms,
         };
 
@@ -209,6 +247,10 @@ class Helper {
 
             if (type == 'pods') {
                 res = await this.get_kube_pods(namespace);
+            }
+
+            if (type == 'deployments') {
+                res = await this.get_kube_deployments(namespace);
             }
 
             if (type == 'apps') {

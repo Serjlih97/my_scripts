@@ -4,10 +4,10 @@ const config      = require('../../modules/config');
 
 class Command extends BaseCommand {
     complete(c) {
-        return helper.kube_autocomplete(c, 'apps');
+        return helper.kube_autocomplete(c, 'deployments');
     }
 
-    async run(args) {
+    run(args) {
         args = args.slice(1);
         const namespace = args.shift();
         const app = args.shift();

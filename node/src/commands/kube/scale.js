@@ -3,7 +3,7 @@ const helper      = require('../../modules/helper');
 
 class Command extends BaseCommand {
     complete(c) {
-        return helper.kube_autocomplete(c, 'apps');
+        return helper.kube_autocomplete(c, 'deployments');
     }
 
     run(args) {
