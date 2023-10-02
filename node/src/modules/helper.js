@@ -189,7 +189,7 @@ class Helper {
         return services[namespace].services;
     }
 
-    async kube_autocomplete(c, type = 'pods', filter = false) {
+    async kube_autocomplete(c, type = 'pods', filter = false, multy = false) {
         if (c.fragment < 4)  {
             const namespaces = await this.get_kube_namespaces();
             c.reply(namespaces);
@@ -202,7 +202,7 @@ class Helper {
             return;
         }
 
-        if (c.fragment < 5) {
+        if (c.fragment < 5 || multy) {
             let args        = c.args.slice(3);
             const namespace = args[0];
             let res         = [];
@@ -223,7 +223,11 @@ class Helper {
                 res = filter(res, c, type);
             }
 
-            c.reply(res);
+            if (!multy) {
+                c.reply(res);
+            } else {
+                this.multi_complite(c, c.args.slice(4), res);
+            }
         } else {
             c.reply([]);
         }

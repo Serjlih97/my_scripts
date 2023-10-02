@@ -3,19 +3,26 @@ const helper      = require('../../modules/helper');
 
 class Command extends BaseCommand {
     complete(c) {
-        return helper.kube_autocomplete(c, 'namespaces');
+        return helper.kube_autocomplete(c, 'apps', false, true);
     }
 
     run(args) {
         args = args.slice(1);
         const namespace = args.shift();
+        const apps = args;
 
         if (!namespace) {
             console.log('Wrong ns name');
             return 1;
         }
 
-        console.log(`_BASH sudo kubefwd svc -n "${namespace}" -d kb.local`);
+        let filters = '';
+
+        if (apps.length > 0) {
+            filters = ` -l "app in (${apps.join(', ')})"`
+        }
+
+        console.log(`_BASH sudo kubefwd svc -n "${namespace}" -d kb.local${filters}`);
     }
 }
 
