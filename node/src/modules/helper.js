@@ -6,7 +6,9 @@ const BaseCommand   = require('../commands/_base');
 class Helper {
     exec(command, exeption = false) {
         return new Promise((resolve, reject) => {
-            child_process.exec(command, {}, (error, result) => {
+            child_process.exec(command, {
+                maxBuffer: 1024 * 1024 * 1024,
+            }, (error, result) => {
                 if (error) {
                     if (exeption) {
                         return reject(error);

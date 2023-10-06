@@ -22,7 +22,7 @@ class Command extends BaseCommand {
             filters = ` -l "app in (${apps.join(', ')})"`
         }
 
-        console.log(`_BASH sudo kubefwd svc -n "${namespace}" -d kb.local${filters}`);
+        console.log(`_BASH sudo kubefwd svc -n "${namespace}"${filters}`);
     }
 }
 
