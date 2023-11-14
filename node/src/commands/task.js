@@ -26,7 +26,7 @@ class Command extends BaseCommand {
             dashboard = default_dashboard;
         }
 
-        console.log(`_BASH open https://bingoboom.atlassian.net/browse/${dashboard}-${res.groups.task}`);
+        console.log(`_BASH open https://jira.betboom.org/browse/${dashboard}-${res.groups.task}`);
         return 0;
     }
 }
