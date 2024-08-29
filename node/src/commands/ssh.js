@@ -14,6 +14,7 @@ class Command extends BaseCommand {
 
         if (!ssh) {
             console.log(`unknown ssh "${ssh_name}"`);
+            return;
         }
 
         console.log(`_BASH ssh ${ssh.user}@${ssh.host} -p ${ssh.port}`);

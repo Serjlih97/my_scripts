@@ -7,7 +7,8 @@ const astparser = require('pgsql-ast-parser');
 const jp = require('jsonpath');
 
 const functions = {
-    'events.publish': 'GRANT EXECUTE ON FUNCTION events.publish(_name text, _domain text, _data jsonb, _routing_key text) TO {user_name};'
+    'events.publish': 'GRANT EXECUTE ON FUNCTION events.publish(_name text, _domain text, _data jsonb, _routing_key text) TO {user_name};',
+    'events_sporthub.publish': 'GRANT EXECUTE ON FUNCTION events_sporthub.publish(_name text, _domain text, _data jsonb, _routing_key text) TO {user_name};'
 };
 
 class Command extends BaseCommand {
@@ -170,15 +171,16 @@ class Command extends BaseCommand {
         });
 
         if (!flags.errors) {
+            const out = [];
             grants.forEach((value, key) => {
-                console.log(`GRANT USAGE ON SCHEMA ${key} TO ${user_name};`);
-                console.log(' ');
+                out.push(`GRANT USAGE ON SCHEMA ${key} TO ${user_name};`, '');
                 Array.from(value).forEach(el => {
-                    console.log(el);
-                    console.log(' ');
+                    out.push(el, '');
                 });
-                console.log(' ');
+                out.push('');
             });
+
+            console.log(out.join('\n\r').trim());
         }
 
         if (errors.length) {

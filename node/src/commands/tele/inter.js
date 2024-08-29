@@ -59,7 +59,7 @@ class Command extends BaseCommand {
             return 1;
         }
 
-        console.log(`_BASH telepresence intercept ${app}-service --port ${local_port}:${port} -n "${namespace}" -w ${app}`);
+        console.log(`_BASH telepresence intercept ${app} --port ${local_port}:${port} -n "${namespace}" -w ${app}`);
     }
 }
 

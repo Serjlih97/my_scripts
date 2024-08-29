@@ -201,6 +201,44 @@ class Helper {
         return apps[namespace].apps;
     }
 
+    async get_kube_service_apps(namespace) {
+        const file_name = __dirname + '/../../tmp/kube_service_apps';
+        let apps = {};
+
+        if (fs.existsSync(file_name)) {
+            apps = JSON.parse(fs.readFileSync(file_name));
+
+            if (apps[namespace] && apps[namespace].expire_dttm > Date.now()) {
+                return apps[namespace].apps;
+            }
+        }
+
+        const res = await this.exec(`kubectl -n ${namespace} get services -o=json`)
+
+        if (!res) {
+            return res;
+        }
+
+        const result = new Set();
+
+        JSON.parse(res.join('')).items.forEach(el => {
+            const app = el?.metadata?.labels?.app;
+
+            if (app) {
+                result.add(app);
+            }
+        });
+
+        apps[namespace] = {
+            apps        : Array.from(result),
+            expire_dttm : Date.now() + config.kube.pods_expire_ms,
+        };
+
+        fs.writeFileSync(file_name, JSON.stringify(apps));
+
+        return apps[namespace].apps;
+    }
+
     async get_kube_services(namespace) {
         const file_name = __dirname + '/../../tmp/kube_services';
         let services = {};
@@ -257,6 +295,10 @@ class Helper {
 
             if (type == 'apps') {
                 res = await this.get_kube_apps(namespace);
+            }
+
+            if (type == 'service_apps') {
+                res = await this.get_kube_service_apps(namespace);
             }
 
             if (type == 'services') {

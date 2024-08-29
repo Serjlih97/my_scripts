@@ -1,9 +1,6 @@
 const BaseCommand = require('./_base');
 const helper      = require('../modules/helper');
 
-const dashboards = ['ONL', 'BACK', 'XX', 'SPOR', 'CRM', 'RED', 'DK', 'FEED', 'BET'];
-const default_dashboard = dashboards[0];
-
 class Command extends BaseCommand {
     async run(args) {
         const branch = await helper.git_current_branch();
@@ -20,13 +17,9 @@ class Command extends BaseCommand {
             return 1;
         }
 
-        let dashboard = res.groups.name.toUpperCase();
+        const dashboard = res.groups.name.toUpperCase();
 
-        if (dashboards.indexOf(dashboard) == -1) {
-            dashboard = default_dashboard;
-        }
-
-        console.log(`_BASH open https://jira.betboom.org/browse/${dashboard}-${res.groups.task}`);
+        console.log(`_BASH open https://media-life.atlassian.net/browse/${dashboard}-${res.groups.task}`);
         return 0;
     }
 }
