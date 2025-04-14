@@ -55,6 +55,7 @@ class Command extends BaseCommand {
 
                     clean_query = clean_query.replace(/\${([^}]+)}/g, `'$1'`);
                     clean_query = clean_query.replace(/VALUES ('[^']+')/g, `VALUES ($1)`);
+                    clean_query = clean_query.replaceAll(/\{\{@if[.\s\S]+\/if\}\}/gu, '');
 
                     return {
                         name,
@@ -105,6 +106,27 @@ class Command extends BaseCommand {
                     }
 
                     tables.get(table).add(action);
+
+                    switch (action) {
+                        case 'InsertStmt': {
+                            const insertObj = jp.value(res, path.slice(0, path.indexOf(action) + 1));
+
+                            if (Object.keys(insertObj).includes('returningList')) {
+                                tables.get(table).add('SelectStmt');
+                            }
+
+                            break;
+                        }
+                        case 'SelectStmt': {
+                            const selectObj = jp.value(res, path.slice(0, path.indexOf(action) + 1));
+
+                            if (Object.keys(selectObj).includes('lockingClause')) {
+                                tables.get(table).add('UpdateStmt');
+                            }
+
+                            break;
+                        }
+                    }
                 });
 
                 const fun_paths = jp.paths(res, '$..funcname');
