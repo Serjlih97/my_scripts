@@ -35,7 +35,7 @@ class Command extends BaseCommand {
             prefix = `${branch} - `;
         }
 
-        console.log(`_BASH git commit -m "${prefix} ${message}"  ${args.join(' ')}`);
+        console.log(`_BASH git commit -m "${prefix}${message}"  ${args.join(' ')}`);
     }
 }
 
