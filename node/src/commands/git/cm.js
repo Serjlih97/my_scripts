@@ -32,10 +32,18 @@ class Command extends BaseCommand {
         let prefix = '';
 
         if (!helper.isMasterBranch(branch)) {
-            prefix = `${branch} - `;
+            try {
+                const task = helper.getTaskName(branch);
+
+                prefix = `${task} - `;
+            } catch (error) {
+                console.log(error.message);
+                return 1;
+            }
         }
 
-        console.log(`_BASH git commit -m "${prefix}${message}"  ${args.join(' ')}`);
+        console.log(`git commit -m "${prefix}${message}"  ${args.join(' ')}`);
+        // console.log(`_BASH git commit -m "${prefix}${message}"  ${args.join(' ')}`);
     }
 }
 

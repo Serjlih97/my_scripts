@@ -10,17 +10,15 @@ class Command extends BaseCommand {
             return 1;
         }
 
-        const res = /^(?<name>[^-_]+)[-_](?<task>[0-9]+)/.exec(branch);
+        try {
+            const task = helper.getTaskName(branch);
 
-        if (!res || !res.groups || !res.groups.task) {
-            console.log('branch must be of the format .*[-_][0-9]+');
+            console.log(`_BASH open https://media-life.atlassian.net/browse/${task}`);
+            return 0;
+        } catch (error) {
+            console.log(error.message);
             return 1;
         }
-
-        const dashboard = res.groups.name.toUpperCase();
-
-        console.log(`_BASH open https://media-life.atlassian.net/browse/${dashboard}-${res.groups.task}`);
-        return 0;
     }
 }
 

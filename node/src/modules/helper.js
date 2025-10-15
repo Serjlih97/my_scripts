@@ -10,6 +10,18 @@ class Helper {
         return master_branches.indexOf(branch) != -1;
     }
 
+    getTaskName(branch) {
+        const res = /^(?<name>[^-_]+)[-_](?<task>[0-9]+)/.exec(branch);
+
+        if (!res || !res.groups || !res.groups.task) {
+            throw new Error('branch must be of the format .*[-_][0-9]+');
+        }
+
+        const dashboard = res.groups.name.toUpperCase();
+
+        return `${dashboard}-${res.groups.task}`;
+    }
+
     exec(command, exeption = false) {
         return new Promise((resolve, reject) => {
             child_process.exec(command, {
