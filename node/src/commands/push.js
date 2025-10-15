@@ -2,14 +2,13 @@ const BaseCommand = require('./_base');
 const helper      = require('../modules/helper');
 
 const labels = ['patch', 'minor', 'major'];
-const master_branches = ['master', 'cupis_master'];
 
 class Command extends BaseCommand {
     async complete(c) {
         const branch = await helper.git_current_branch();
         const tags = ['--force'];
 
-        if (master_branches.indexOf(branch) == -1) {
+        if (!helper.isMasterBranch(branch)) {
             c.reply([...labels, ...tags]);
         }
 
@@ -27,7 +26,7 @@ class Command extends BaseCommand {
 
         let command = `git push origin ${branch}`;
 
-        if (master_branches.indexOf(branch) == -1) {
+        if (!helper.isMasterBranch(branch)) {
             const label = args[0];
 
             const res = await helper.exec(`git show-branch remotes/origin/${branch}`);

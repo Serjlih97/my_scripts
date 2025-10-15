@@ -94,6 +94,9 @@ npm run cleanup
 - [tele](#tele)
     - [inter](#tele-inter)
     - [leave](#tele-leave)
+- [git](#git)
+    - [pm](#git-pm)
+    - [cm](#git-cm)
 
 ## branch
 
@@ -333,4 +336,22 @@ my tele inter namespace_name service_name service_port local_port
 Выйти из режима перехвата трафика
 ```bash
 my tele leave intercept_name
+```
+
+## git
+
+Работа с git
+
+### git pm
+
+Сокращение от git pull master. Делает переход в master ветку, подтягивает изменения и возвращается обратно в активную ветку
+```bash
+my git pm
+```
+
+### git cm
+
+Вспомогательная команда для git commit с добавлением в начало сообщения названия ветки (если это не master или main)
+```bash
+my git cm "commit message" [--no-verify]
 ```

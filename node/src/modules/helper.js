@@ -3,7 +3,13 @@ const child_process = require('child_process');
 const config        = require('../modules/config');
 const BaseCommand   = require('../commands/_base');
 
+const master_branches = ['master', 'cupis_master'];
+
 class Helper {
+    isMasterBranch(branch) {
+        return master_branches.indexOf(branch) != -1;
+    }
+
     exec(command, exeption = false) {
         return new Promise((resolve, reject) => {
             child_process.exec(command, {
