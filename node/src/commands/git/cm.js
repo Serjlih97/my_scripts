@@ -42,8 +42,7 @@ class Command extends BaseCommand {
             }
         }
 
-        console.log(`git commit -m "${prefix}${message}"  ${args.join(' ')}`);
-        // console.log(`_BASH git commit -m "${prefix}${message}"  ${args.join(' ')}`);
+        console.log(`_BASH git commit -m "${prefix}${message}"  ${args.join(' ')}`);
     }
 }
 
